@@ -1,0 +1,6 @@
+# test and scratch output
+test_out/
+*.out.txt
+*.log
+_jobs/
+dev/
