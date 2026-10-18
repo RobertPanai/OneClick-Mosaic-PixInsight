@@ -1,76 +1,117 @@
-# OneClick Mosaic - PixInsight
+<h1 align="center">OneClick Mosaic &middot; PixInsight</h1>
 
-**One run, one mosaic per filter.** A self-contained PixInsight script (PJSR) that takes the panels of a mosaic, groups
-them by filter (L, R, G, B, Ha, OIII, SII, ...) and produces a finished, cropped mosaic for each filter:
+<p align="center">
+  <b>Drop the panels in, press Run, get one finished, cropped mosaic for every filter.</b><br/>
+  A self-contained PixInsight script: plate solving check, registration, edge trim, photometric join and a common autocrop,<br/>
+  with no other mosaic script required.
+</p>
+
+<p align="center">
+  <img alt="PixInsight 1.9" src="https://img.shields.io/badge/PixInsight-1.9.x-blue">
+  <img alt="Version" src="https://img.shields.io/badge/version-0.3.0-green">
+  <img alt="Licence" src="https://img.shields.io/badge/licence-MIT-lightgrey">
+</p>
+
+---
+
+## Why
+
+Building a multi-filter mosaic by hand means repeating the same sequence for every filter: register the panels on a common
+grid, trim the ragged edges, match the brightness of the panels, remove the gradient between them, join them, then crop all the
+filters identically. **OneClick Mosaic does this for all your filters in a single run**, with the same geometry for every
+filter so that L, R, G, B, Ha, OIII, SII... stack perfectly afterwards.
 
 ```
-[plate solving] -> registration -> trim -> photometric join -> common autocrop
- (only panels without
-  astrometric data)
+panels ──► astrometry check ──► registration ──► trim ──► photometric join ──► common autocrop ──► Mosaic_<filter>_crop.xisf
+           (ImageSolver only                       on one shared TAN grid           same crop, every filter
+            if data is missing)
 ```
-
-By Robert Panai. Registration, edge trimming, photometric scaling, gradient correction and joining are implemented in
-this repository (see [docs/ENGINE.md](docs/ENGINE.md)); no other mosaic script is required. The only external piece is
-PixInsight's own **ImageSolver** script, used when a panel has no astrometric data.
 
 ## Features
-- **Inputs:** files, a whole folder, or windows already open in PixInsight (open windows are never modified), grouped
-  automatically by filter (FITS keyword, then file name). Reorder panels, move them between filters, rename filters.
-- **Automatic astrometry check:** every panel is checked for an astrometric solution as soon as it is added (WCS column).
-  If some panels have none, a notice appears under the list and, when you press Run, you are told which panels will be
-  solved, and which header items ImageSolver is missing (coordinates, focal length, pixel size).
-- **Plate solving with ImageSolver:** never / only if missing (default) / always. Solving is done on a copy; originals are
-  never touched. Pixel size and focal length from the options fill in for missing header values.
-- **Shared geometry:** the reference filter (default L) is built first and its geometry is reused by every other filter,
-  so all mosaics share the same grid, size and orientation.
-- **Autocrop (default on):** one crop common to all filters - the largest rectangle with **zero empty pixels**, with the
-  rotation optimised (typically 5-10% more image than an axis-aligned crop). The same transform is applied to every filter,
-  so sizes and star positions stay identical. Saved as `Mosaic_<filter>_crop.xisf` and opened in PixInsight automatically
-  (auto-stretched on screen only). If a rotation gains less than 0.5% the crop is not rotated, so no resampling happens.
-- **Isolation:** a failing filter does not stop the others; aborting leaves no orphan windows.
-- **Execution:** sequential (default) or experimental parallel (one extra PixInsight instance per filter, more RAM).
-- Persistent settings, process icon / instance support, full log file.
+
+| | |
+|---|---|
+| **Inputs** | Files, whole folders or windows already open in PixInsight (open windows are never modified). Automatic grouping by filter (FITS keyword, then file name); reorder panels, move them between filters, rename filters. |
+| **Astrometry check** | Each panel is checked for an astrometric solution as soon as it is added. Panels without one are flagged in the list, and on **Run** you are told which panels will be solved and which header items are missing (coordinates, focal length, pixel size). |
+| **Plate solving** | Never / only if missing (default) / always, using PixInsight's own **ImageSolver**. A *copy* is solved: your original files are never modified. |
+| **Shared geometry** | The reference filter (L by default) defines one gnomonic frame, reused by all other filters: same grid, size and orientation. |
+| **Photometric join** | Stellar photometry sets the brightness scale between panels; a smoothing thin-plate-spline model removes the residual gradient; the seam is fitted where the data overlap. Grids (rows first) are supported. |
+| **Autocrop** | One crop common to all filters: the largest rectangle, rotation optimised, with **no empty pixel**. Saved as `Mosaic_<filter>_crop.xisf` and opened in PixInsight. |
+| **Robust** | A failing filter does not stop the others; aborting leaves no orphan windows. |
+| **Execution** | Sequential (default) or experimental parallel (one extra PixInsight instance per filter). |
+| **Housekeeping** | Persistent settings, process icon / instance support, full log file. |
+
+## How it works, in one paragraph
+
+All panels are reprojected onto a common **gnomonic (TAN)** frame built from their astrometric solutions
+(finest pixel scale, orientation of the first panel, size from the union of the projected outlines). Edges are eroded by
+5 px. For every pair of overlapping panels the target is scaled to the reference by the **least-squares slope of star fluxes
+through the origin** (robust, aperture photometry with a median-sky ring), the remaining additive difference is modelled by
+a **thin-plate surface spline** fitted to median-filtered sample squares (smoothing chosen by 5-fold cross-validation), and the
+corrected target is composed with the reference along a straight seam through the overlap. Finally one rotated rectangle,
+found with a maximal-rectangle-in-a-histogram search over the rotation angle, crops all filters identically.
+
+The full derivation, formulas and parameters are in **[docs/ENGINE.md](docs/ENGINE.md)**.
 
 ## Requirements
+
 - PixInsight 1.9.x (developed and tested on 1.9.3.8, Windows).
-- Only for panels without astrometric data: PixInsight's ImageSolver script (tested 6.3.1), part of the standard
-  installation. Its version is checked before it is used.
+- *Only for panels without astrometric data:* PixInsight's ImageSolver script (tested with 6.3.1), part of the standard installation.
+- Linear panels, with empty areas equal to exactly 0 (the normal output of registration / stacking).
 
 ## Install
 
-**Recommended - from PixInsight (updates automatically):**
-1. **RESOURCES > Updates > Manage Repositories > Add**, paste:
+**Recommended: from PixInsight (updates automatically)**
+
+1. **RESOURCES &gt; Updates &gt; Manage Repositories &gt; Add**, paste:
    ```
    https://raw.githubusercontent.com/RobertPanai/OneClick-Mosaic-PixInsight/main/pixinsight-repository/
    ```
-2. **RESOURCES > Updates > Check for Updates**, install "OneClick Mosaic - PixInsight", restart PixInsight.
-   (The package installs into `src/scripts/AutoMosaic`; on Windows PixInsight may ask for administrator rights.)
-3. Run it from **SCRIPT > Mosaic > AutoMosaic**.
+2. **RESOURCES &gt; Updates &gt; Check for Updates**, install *OneClick Mosaic - PixInsight*, restart PixInsight.
+   (It installs into `src/scripts/AutoMosaic`; on Windows PixInsight may ask for administrator rights.)
+3. Run it from **SCRIPT &gt; Mosaic &gt; AutoMosaic**.
 
-**Manual:** clone or download this repository, then **SCRIPT > Feature Scripts > Add**, select the repository folder
+**Manual:** clone or download this repository, then **SCRIPT &gt; Feature Scripts &gt; Add**, select the repository folder
 (keep it free of very large files: PixInsight scans it recursively), **Done**.
 
 ## Use
-1. Add files / folder / windows. Check the filter grouping and the WCS column.
-2. Choose the output folder and options. Press **Run**.
 
-Output:
+1. **Add Files / Add Folder / Add Windows.** Check the filter grouping and the **WCS** column.
+2. If a notice says some panels have no astrometric data, leave *Plate solving* on **If missing** (default).
+3. Choose the output folder and options, press **Run**.
+
 ```
-<out>/<filter>/01_solved/            solved copies (only if solving was needed)
-<out>/<filter>/02_registered/        panels reprojected on the common grid
-<out>/<filter>/03_trimmed/           trimmed panels (+ partial mosaics)
+<out>/<filter>/01_solved/              solved copies (only if solving was needed)
+<out>/<filter>/02_registered/          panels reprojected on the common grid
+<out>/<filter>/03_trimmed/             trimmed panels (+ partial mosaics)
 <out>/<filter>/Mosaic_<filter>.xisf         the mosaic
 <out>/<filter>/Mosaic_<filter>_crop.xisf    the cropped mosaic (autocrop)
 <out>/AutoMosaic_<timestamp>.log
 ```
 
-## How it works
-See [docs/ENGINE.md](docs/ENGINE.md) and [TESTING.md](TESTING.md).
+## Performance
 
-## Status
-Version 0.3.0. Verified on a two-panel mosaic in six filters (shared geometry, autocrop). Grids of more than two panels,
-colour panels and a real ImageSolver run from the dialog flow are covered by [TESTING.md](TESTING.md). Issues and feedback
-are welcome.
+Two panels of 6252 &times; 4176 px, six filters, shared geometry, autocrop, sequential run: **about 2 min 12 s** in total
+(17-20 s per filter) on a desktop PC. See [TESTING.md](TESTING.md).
 
-## Licence
-MIT (see [LICENSE](LICENSE)). See [CREDITS.md](CREDITS.md).
+## Limits
+
+Only the TAN projection is produced, the seam is a straight line, and there are no interactive previews. Details in
+[docs/ENGINE.md](docs/ENGINE.md#known-limits).
+
+## Repository layout
+
+```
+AutoMosaic.js          entry point (PixInsight feature script)
+lib/                   dialog, pipeline, runner, inputs, ImageSolver adapter, autocrop
+lib/engine/            geometry, reprojection, trim, layout, overlap, photometry, gradient, composition, join
+lib/engine/test/       node test of the join planner
+docs/ENGINE.md         mathematics and implementation notes
+tools/                 builds the PixInsight update repository
+pixinsight-repository/ what Manage Repositories reads
+```
+
+## Credits and licence
+
+By **Robert Panai**, MIT licence ([LICENSE](LICENSE)); see [CREDITS.md](CREDITS.md). Built on PixInsight, whose ImageSolver
+script is used for plate solving.
