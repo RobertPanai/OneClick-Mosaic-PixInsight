@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (branch `integrated-engine`)
+## 0.3.0
 - New **integrated engine** (default): registration, edge trimming and photometric join are implemented inside
   AutoMosaic (`lib/engine/`), so MosaicByCoordinates, TrimMosaicTile and PhotometricMosaic are no longer needed.
   ImageSolver stays an optional dependency (only to plate-solve panels that have no solution).

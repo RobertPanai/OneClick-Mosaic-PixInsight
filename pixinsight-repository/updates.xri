@@ -4,11 +4,11 @@
       <p>OneClick Mosaic - PixInsight, by Robert Panai. One run, one cropped mosaic per filter.</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.9:1.9.99">
-      <package fileName="20261018-OneClickMosaic.zip" sha1="6c1a0d7e83468ea462322a367440b2c507d2b945" type="script" releaseDate="20261018">
-         <title>OneClick Mosaic - PixInsight 0.2.0</title>
+      <package fileName="20261018-OneClickMosaic.zip" sha1="35e2dcf85303def85ba28da3efed9f2549db2e28" type="script" releaseDate="20261018">
+         <title>OneClick Mosaic - PixInsight 0.3.0</title>
          <description>
-            <p>Builds one mosaic per filter with ImageSolver, MosaicByCoordinates, TrimMosaicTile and PhotometricMosaic
-            (default settings), then applies one common, rotation-optimised autocrop to every filter.
+            <p>Builds one mosaic per filter with its own integrated engine (registration, trim, photometric join; the
+            legacy MosaicByCoordinates / TrimMosaicTile / PhotometricMosaic flow is selectable), then applies one common, rotation-optimised autocrop to every filter.
             Requires those four scripts, which are the work of Andr&#233;s del Pozo, Juan Conejero and John Murphy.
             Installs as SCRIPT &gt; Mosaic &gt; AutoMosaic.</p>
             <p>Project page and credits: https://github.com/RobertPanai/OneClick-Mosaic-PixInsight</p>

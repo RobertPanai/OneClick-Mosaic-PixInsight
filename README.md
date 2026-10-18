@@ -10,8 +10,8 @@ PixInsight tools with their default settings:
   without a solution)
 ```
 
-> **Branch `integrated-engine`:** the default engine is now AutoMosaic's own code (see [docs/ENGINE.md](docs/ENGINE.md));
-> the third-party scripts below are only needed when the *Legacy* engine is selected.
+> **Since 0.3.0** the default engine is AutoMosaic's own code (see [docs/ENGINE.md](docs/ENGINE.md)); the third-party
+> scripts listed under Requirements are only needed when the *Legacy* engine is selected (ImageSolver is optional).
 
 By Robert Panai. The mosaicking itself is done by tools written by Andrés del Pozo, Juan Conejero and John Murphy:
 see [CREDITS.md](CREDITS.md) - please read it, and credit them when you share your images.

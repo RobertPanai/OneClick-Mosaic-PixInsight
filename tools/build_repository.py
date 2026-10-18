@@ -20,6 +20,7 @@ for f in os.listdir(outdir):
 name = "%s-OneClickMosaic.zip" % date
 files = ["AutoMosaic.js", "LICENSE", "CREDITS.md", "README.md"]
 files += ["lib/" + f for f in sorted(os.listdir(os.path.join(root, "lib"))) if f.endswith(".js")]
+files += ["lib/engine/" + f for f in sorted(os.listdir(os.path.join(root, "lib", "engine"))) if f.endswith(".js")]
 with zipfile.ZipFile(os.path.join(outdir, name), "w", zipfile.ZIP_DEFLATED) as z:
     for f in files:
         zi = zipfile.ZipInfo("src/scripts/AutoMosaic/" + f, date_time=(2026, 1, 1, 0, 0, 0))
@@ -36,8 +37,8 @@ xri = '''<?xml version="1.0" encoding="UTF-8"?>
       <package fileName="%(name)s" sha1="%(sha1)s" type="script" releaseDate="%(date)s">
          <title>OneClick Mosaic - PixInsight %(version)s</title>
          <description>
-            <p>Builds one mosaic per filter with ImageSolver, MosaicByCoordinates, TrimMosaicTile and PhotometricMosaic
-            (default settings), then applies one common, rotation-optimised autocrop to every filter.
+            <p>Builds one mosaic per filter with its own integrated engine (registration, trim, photometric join; the
+            legacy MosaicByCoordinates / TrimMosaicTile / PhotometricMosaic flow is selectable), then applies one common, rotation-optimised autocrop to every filter.
             Requires those four scripts, which are the work of Andr&#233;s del Pozo, Juan Conejero and John Murphy.
             Installs as SCRIPT &gt; Mosaic &gt; AutoMosaic.</p>
             <p>Project page and credits: https://github.com/RobertPanai/OneClick-Mosaic-PixInsight</p>
