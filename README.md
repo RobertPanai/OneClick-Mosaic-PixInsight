@@ -8,7 +8,7 @@
 
 <p align="center">
   <img alt="PixInsight 1.9" src="https://img.shields.io/badge/PixInsight-1.9.x-blue">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.3.0-green">
+  <img alt="Version" src="https://img.shields.io/badge/version-0.3.2-green">
   <img alt="Licence" src="https://img.shields.io/badge/licence-MIT-lightgrey">
 </p>
 
@@ -26,6 +26,16 @@ panels ──► astrometry check ──► registration ──► trim ──�
            (ImageSolver only                       on one shared TAN grid           same crop, every filter
             if data is missing)
 ```
+
+## Tutorial
+
+A step-by-step walkthrough with screenshots, from two panels to a finished, plate-solved mosaic, is in
+[docs/TUTORIAL.md](docs/TUTORIAL.md). All the images can be downloaded from [docs/tutorial/images](docs/tutorial/images).
+
+<p align="center">
+  <a href="docs/TUTORIAL.md"><img alt="Two panels and the mosaic obtained from them" src="docs/tutorial/images/overview_panels_to_mosaic.png" width="900"></a><br/>
+  <i>Two input panels (left) and the cropped mosaic (right).</i>
+</p>
 
 ## Features
 
