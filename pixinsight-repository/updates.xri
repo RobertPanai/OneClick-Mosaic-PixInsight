@@ -4,8 +4,8 @@
       <p>OneClick Mosaic - PixInsight, by Robert Panai. One run, one cropped mosaic per filter.</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.9:1.9.99">
-      <package fileName="20261018-OneClickMosaic.zip" sha1="19a3226c6514aeba1c71aafaa9e154f4decbec00" type="script" releaseDate="20261018">
-         <title>OneClick Mosaic - PixInsight 0.3.1</title>
+      <package fileName="20261018-OneClickMosaic.zip" sha1="c52cf77b4be01c8068f1343167fb2501f0179964" type="script" releaseDate="20261018">
+         <title>OneClick Mosaic - PixInsight 0.3.2</title>
          <description>
             <p>Builds one mosaic per filter with its own registration, trim and photometric join, then applies one common,
             rotation-optimised autocrop. Panels without astrometric data are detected automatically and can be solved
