@@ -34,10 +34,20 @@ see [CREDITS.md](CREDITS.md) - please read it, and credit them when you share yo
   Versions are checked at start; unsupported versions stop the run with a clear message.
 
 ## Install
-1. Clone or download this repository.
-2. In PixInsight: **SCRIPT > Feature Scripts > Add**, select the repository folder, **Done**.
-   (Keep the folder free of very large files: PixInsight scans it recursively.)
-3. Run it from **SCRIPT > Mosaic > AutoMosaic** (the script keeps this name inside PixInsight).
+
+**Recommended - from PixInsight (updates automatically):**
+1. **RESOURCES > Updates > Manage Repositories > Add**, paste:
+   ```
+   https://raw.githubusercontent.com/RobertPanai/OneClick-Mosaic-PixInsight/main/pixinsight-repository/
+   ```
+2. **RESOURCES > Updates > Check for Updates**, install "OneClick Mosaic - PixInsight", restart PixInsight.
+   (The package installs into `src/scripts/AutoMosaic`; on Windows PixInsight may ask for administrator rights.)
+3. Run it from **SCRIPT > Mosaic > AutoMosaic**.
+
+**Manual:** clone or download this repository, then **SCRIPT > Feature Scripts > Add**, select the repository folder
+(keep it free of very large files: PixInsight scans it recursively), **Done**.
+
+Remember that the four tools listed under Requirements must be installed too.
 
 ## Use
 1. Add files / folder / windows. Check the filter grouping.
