@@ -20,3 +20,8 @@ repository deliberately does not include them.
 ## This project
 OneClick Mosaic - PixInsight, Copyright (c) 2026 Robert Panai, released under the MIT licence (see `LICENSE`, which covers
 only the files of this repository). The program was developed with the assistance of Claude (Anthropic).
+
+## Integrated engine (0.3.0)
+The integrated engine re-implements the mosaic steps independently. Its registration stage follows the approach of
+MosaicByCoordinates (BSD-2, Andrés del Pozo, Juan Conejero). TrimMosaicTile and PhotometricMosaic (John Murphy) were
+only studied through their public documentation; their algorithms are re-implemented from scratch and no code was copied.

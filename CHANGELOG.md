@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 (branch `integrated-engine`)
+- New **integrated engine** (default): registration, edge trimming and photometric join are implemented inside
+  AutoMosaic (`lib/engine/`), so MosaicByCoordinates, TrimMosaicTile and PhotometricMosaic are no longer needed.
+  ImageSolver stays an optional dependency (only to plate-solve panels that have no solution).
+- The previous behaviour is kept as the **legacy engine** (dialog: Engine). `main` still ships 0.2.x unchanged.
+- Validated on the 2-panel SMC data set, 6 filters, shared geometry, autocrop: all OK in about 2 min 12 s (serial).
+
 ## 0.2.1
 - PixInsight update repository (`pixinsight-repository/`, built by `tools/build_repository.py`) so the script can be installed from Manage Repositories.
 
