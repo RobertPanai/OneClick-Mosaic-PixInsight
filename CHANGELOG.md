@@ -1,6 +1,10 @@
 # Changelog
 
 ## 0.3.2
+- **The screen stretch is PixInsight's own Auto STF** (shadows clipping -2.8 sigma, target background 0.25, linked
+  channels). The previous stretch wrote the transfer function parameters in the wrong order and could crush the background.
+  Only the screen transfer function is set; the pixels are never changed.
+- Added a step-by-step tutorial with screenshots and result images: docs/TUTORIAL.md.
 - **Plate solving of the delivered mosaics.** Each opened mosaic (cropped and/or uncropped) is plate solved with
   PixInsight's ImageSolver dialog. This is on by default and can be turned off with the new option
   *Plate solve the mosaics (ImageSolver)*. The solve runs once per kind of mosaic (cropped / uncropped) and the solution
