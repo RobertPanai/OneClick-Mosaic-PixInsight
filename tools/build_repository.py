@@ -32,7 +32,7 @@ xri = '''<?xml version="1.0" encoding="UTF-8"?>
    <description>
       <p>OneClick Mosaic - PixInsight, by Robert Panai. One run, one cropped mosaic per filter.</p>
    </description>
-   <package fileName="%(name)s" sha1="%(sha1)s" type="script" releaseDate="%(date)s">
+   <package fileName="%(name)s" sha1="%(sha1)s" os="all" arch="noarch" type="script" releaseDate="%(date)s">
       <title>OneClick Mosaic - PixInsight %(version)s</title>
       <description>
          <p>Builds one mosaic per filter with ImageSolver, MosaicByCoordinates, TrimMosaicTile and PhotometricMosaic
@@ -41,7 +41,6 @@ xri = '''<?xml version="1.0" encoding="UTF-8"?>
          Installs as SCRIPT &gt; Mosaic &gt; AutoMosaic.</p>
          <p>Project page and credits: https://github.com/RobertPanai/OneClick-Mosaic-PixInsight</p>
       </description>
-      <platform os="all" arch="noarch" version="1.8.9:1.9.99"/>
    </package>
 </xri>
 ''' % dict(name=name, sha1=sha1, date=date, version=version)
