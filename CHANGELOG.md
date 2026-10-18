@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.1
+- **Nothing is saved by default.** The work is done in a temporary folder that is deleted at the end. The cropped mosaic
+  of each filter is opened in PixInsight; the uncropped one can be opened too. Saving to a folder is optional
+  (cropped and/or uncropped, with an overwrite option that stops the run before starting if files would be replaced).
+- **Plate solving opens PixInsight's own ImageSolver dialog** on each panel that has no astrometric solution (with your
+  saved settings). When the panel is solved, the mosaic starts by itself. The original file is never modified.
+- The per-filter settings for pixel size / focal length, the "keep intermediate files" option and the solve mode selector are removed.
+- The final log window is no longer shown; errors are explained in a message box with the cause and a suggestion.
+- Removed the legacy engine references and author names from the code.
+
 ## 0.3.0
 - New **integrated engine** (default): registration, edge trimming and photometric join are implemented inside
   AutoMosaic (`lib/engine/`), so MosaicByCoordinates, TrimMosaicTile and PhotometricMosaic are no longer needed.

@@ -32,9 +32,9 @@ registered panel are exactly 0).
 For every panel the header is inspected without loading pixels (`CTYPE1`, `CRVAL1`, a CD/PC matrix, or PixInsight's
 `PCL:AstrometricSolution:*` properties); if the header is inconclusive the image is opened and
 `ImageWindow.hasAstrometricSolution` is queried. Panels without a solution are flagged (WCS column, notice under the list).
-On *Run* the user is told which panels will be solved and what ImageSolver is missing in the header of each:
-approximate coordinates (`RA/DEC` or `OBJCTRA/OBJCTDEC`), focal length $f$ and pixel size $p$. If the header lacks $f$ or $p$
-the values typed in the options are used, and the plate scale is
+For each panel without a solution, PixInsight's ImageSolver dialog is opened on a copy of it, with the user's saved
+settings. The user sets the parameters (coordinates, focal length, pixel size, catalogue) and presses OK; the image is then
+solved in the temporary folder and the mosaic starts by itself. Plate scale, when it has to be entered by hand, is
 
 $$ s \;=\; \frac{p}{f}\,\frac{180}{\pi}\cdot 10^{-3} \ \ [\text{deg/px}]\qquad (p\ \text{in}\ \mu\text{m},\ f\ \text{in mm}) $$
 

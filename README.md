@@ -33,13 +33,13 @@ panels ──► astrometry check ──► registration ──► trim ──�
 |---|---|
 | **Inputs** | Files, whole folders or windows already open in PixInsight (open windows are never modified). Automatic grouping by filter (FITS keyword, then file name); reorder panels, move them between filters, rename filters. |
 | **Astrometry check** | Each panel is checked for an astrometric solution as soon as it is added. Panels without one are flagged in the list, and on **Run** you are told which panels will be solved and which header items are missing (coordinates, focal length, pixel size). |
-| **Plate solving** | Never / only if missing (default) / always, using PixInsight's own **ImageSolver**. A *copy* is solved: your original files are never modified. |
+| **Plate solving** | Panels without astrometric data open PixInsight's own **ImageSolver** dialog; once solved, the mosaic starts by itself. A *copy* is solved: your original files are never modified. |
 | **Shared geometry** | The reference filter (L by default) defines one gnomonic frame, reused by all other filters: same grid, size and orientation. |
 | **Photometric join** | Stellar photometry sets the brightness scale between panels; a smoothing thin-plate-spline model removes the residual gradient; the seam is fitted where the data overlap. Grids (rows first) are supported. |
-| **Autocrop** | One crop common to all filters: the largest rectangle, rotation optimised, with **no empty pixel**. Saved as `Mosaic_<filter>_crop.xisf` and opened in PixInsight. |
+| **Autocrop** | One crop common to all filters: the largest rectangle, rotation optimised, with **no empty pixel**. The cropped mosaics are opened in PixInsight by default. |
 | **Robust** | A failing filter does not stop the others; aborting leaves no orphan windows. |
 | **Execution** | Sequential (default) or experimental parallel (one extra PixInsight instance per filter). |
-| **Housekeeping** | Persistent settings, process icon / instance support, full log file. |
+| **Housekeeping** | Nothing is saved unless you ask for it; persistent settings; process icon / instance support. |
 
 ## How it works, in one paragraph
 
@@ -77,17 +77,11 @@ The full derivation, formulas and parameters are in **[docs/ENGINE.md](docs/ENGI
 ## Use
 
 1. **Add Files / Add Folder / Add Windows.** Check the filter grouping and the **WCS** column.
-2. If a notice says some panels have no astrometric data, leave *Plate solving* on **If missing** (default).
-3. Choose the output folder and options, press **Run**.
+2. If a notice says some panels have no astrometric data, tick *Plate solve panels without astrometric data*: the ImageSolver dialog opens on each of them. Set it up and press OK; the mosaic starts by itself.
+3. Choose the result: **Open cropped mosaic** (default), *Open uncropped mosaic*, and/or *Save to folder* (cropped / uncropped). Press **Run**.
 
-```
-<out>/<filter>/01_solved/              solved copies (only if solving was needed)
-<out>/<filter>/02_registered/          panels reprojected on the common grid
-<out>/<filter>/03_trimmed/             trimmed panels (+ partial mosaics)
-<out>/<filter>/Mosaic_<filter>.xisf         the mosaic
-<out>/<filter>/Mosaic_<filter>_crop.xisf    the cropped mosaic (autocrop)
-<out>/AutoMosaic_<timestamp>.log
-```
+Nothing is saved unless you ask for it. The intermediate files live in a temporary folder that is deleted at the end of the run.
+If a step fails, a message box explains what went wrong and what to check.
 
 ## Performance
 
