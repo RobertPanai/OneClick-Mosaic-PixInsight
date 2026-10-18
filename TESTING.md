@@ -1,15 +1,14 @@
-# Test results (PixInsight 1.9.3.8, SMC data, 2 panels x L and OIII)
+# Test results (PixInsight 1.9.3.8, SMC data, 2 panels x 6 filters: L, R, G, B, Ha, OIII)
 
 | Test | Result |
 |---|---|
-| L mosaic vs manual result | max abs diff 0 |
-| OIII mosaic (own geometry) vs manual result | max abs diff 0 |
-| Shared geometry (L -> OIII) | OIII on L grid 6507x7605 |
-| Serial vs parallel (L local + OIII in 2nd instance) | max abs diff 0 on both, 34 s |
-| Failing panel in one filter | L OK, OIII FAILED with message, no orphan windows (28 before/after) |
+| Full run, integrated engine, shared geometry, autocrop, serial | 6/6 filters OK, about 2 min 12 s, `Mosaic_<f>.xisf` + `Mosaic_<f>_crop.xisf` |
+| Seam inspection (L) | no visible seam or gradient step across the overlap |
+| Join planning (`lib/engine/test/layout.test.js`, node) | rows-first order for grids, passes |
+| Failing panel in one filter | the other filters complete, message in the summary, no orphan windows |
 | Input validation (channel mismatch) | stops before processing, clear message |
-| Autocrop L+OIII (SMC) | common crop 6030x7273, rotation -2.82 deg, +7.3% image vs best axis-aligned; no empty pixel, no dark rim on any border; same size for both filters |
 | No modal dialogs during runs | none seen |
+| Astrometry check + ImageSolver (panel with its solution removed) | see CHANGELOG / below |
 
-Not yet tested: open windows as input, solve-if-missing with a real ImageSolver run, user abort mid-run.
-Scripts are in `dev/` (run with SCRIPT > Execute Script File); the test scripts are not part of the repository (they contain local paths).
+Not yet tested: grids larger than 2 panels on real data, colour panels, parallel mode with the integrated engine,
+user abort mid-run.

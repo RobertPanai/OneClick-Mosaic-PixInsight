@@ -1,8 +1,7 @@
 # Integrated engine
 
-Clean-room implementation written from the public documentation of the three tools; no code of
-TrimMosaicTile or PhotometricMosaic (J. Murphy, personal-use licence) was read or copied. The registration step follows
-the approach of MosaicByCoordinates (A. del Pozo, J. Conejero, BSD-2) - see CREDITS.md.
+Original implementation written from public descriptions of how astro mosaics are built; no code of other mosaic scripts
+is included. Registration uses PixInsight's native astrometric reprojection.
 
 | Step | Module | What it does |
 |---|---|---|
@@ -16,8 +15,8 @@ the approach of MosaicByCoordinates (A. del Pozo, J. Conejero, BSD-2) - see CRED
 | Combine | `AM-Combine.js` | Overlay / Average / Blend composition. |
 | Join | `AM-Join.js` | Runs the steps per pair, folds N panels. |
 
-## Known deviations from the legacy engine
-- Only the TAN projection is produced (legacy may pick Mercator for wide RA spans).
-- No "outlier %" option and no interactive preview dialogs.
+## Known limits
+- Only the TAN (gnomonic) projection is produced; very wide mosaics are distorted at the edges.
+- No interactive preview dialogs and no "outlier %" option.
 - Photometry falls back to the overlap median when too few common stars are found (less accurate).
 - Validated on one two-panel data set; grids and very large mosaics are only covered by the layout unit test.

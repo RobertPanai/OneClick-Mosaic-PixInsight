@@ -1,22 +1,18 @@
 // AutoMosaic.js - PixInsight script (PJSR).
 //
-// For every filter (L, R, G, B, Ha, OIII, SII, ...) runs, with default settings:
-//    [ImageSolver] -> MosaicByCoordinates -> TrimMosaicTile -> PhotometricMosaic -> common autocrop
+// For every filter (L, R, G, B, Ha, OIII, SII, ...):
+//    [plate solving, if a panel has no astrometric data] -> registration -> trim -> photometric join -> common autocrop
 //
 // OneClick Mosaic - PixInsight. Copyright (c) 2026 Robert Panai (MIT licence, see LICENSE).
-// This script does not contain, copy or modify the code of the scripts it drives; they must be
-// installed separately and are the work of Andres del Pozo, Juan Conejero and John Murphy
-// (see CREDITS.md).
+// Self-contained: only PixInsight's own ImageSolver script is called, and only for panels without astrometric data.
 //
-// Tested with PixInsight 1.9.3, ImageSolver 6.3.1, MosaicByCoordinates 1.3.3,
-// TrimMosaicTile 4.0.1 and PhotometricMosaic 4.0.2.
+// Tested with PixInsight 1.9.3 and ImageSolver 6.3.1.
 
 #feature-id    AutoMosaic : Mosaic > AutoMosaic
 
-#feature-info  Runs ImageSolver (optional), MosaicByCoordinates, TrimMosaicTile and \
-               PhotometricMosaic with default settings, per filter.<br/>\
-               Requires those four scripts to be installed.<br/>\
-               Copyright &copy; 2026 Robert Panai. Uses scripts by A. del Pozo, J. Conejero and J. Murphy.
+#feature-info  Builds one mosaic per filter: registration, edge trim, photometric join and a common autocrop. \
+               Panels without astrometric data are checked automatically and can be solved with ImageSolver.<br/>\
+               Copyright &copy; 2026 Robert Panai.
 
 #include "lib/AM-Pjsr.js"
 #include "lib/AM-Config.js"
@@ -25,10 +21,7 @@
 #include "lib/AM-Wcs.js"
 #include "lib/AM-Inputs.js"
 #include "lib/AM-State.js"
-#include "lib/AM-Adapter-MBC.js"
 #include "lib/AM-Adapter-ImageSolver.js"
-#include "lib/AM-Adapter-TMT.js"
-#include "lib/AM-Adapter-PMM.js"
 #include "lib/AM-Pipeline.js"
 #include "lib/engine/AM-Geometry.js"
 #include "lib/engine/AM-Reproject.js"

@@ -4,7 +4,10 @@
 - New **integrated engine** (default): registration, edge trimming and photometric join are implemented inside
   AutoMosaic (`lib/engine/`), so MosaicByCoordinates, TrimMosaicTile and PhotometricMosaic are no longer needed.
   ImageSolver stays an optional dependency (only to plate-solve panels that have no solution).
-- The previous behaviour is kept as the **legacy engine** (dialog: Engine). `main` still ships 0.2.x unchanged.
+- The scripts that 0.2.x drove (external registration / trim / join scripts) are **no longer used or required**.
+- **Automatic astrometry check:** panels without astrometric data are flagged in the dialog (notice + WCS column); on Run the
+  user is told which panels will be solved with ImageSolver and what their headers lack (coordinates, focal length,
+  pixel size). Solving works on copies. Dialog pixel size / focal length are passed to ImageSolver when the header lacks them.
 - Validated on the 2-panel SMC data set, 6 filters, shared geometry, autocrop: all OK in about 2 min 12 s (serial).
 
 ## 0.2.1
@@ -15,5 +18,5 @@
   filter; saved as `Mosaic_<filter>_crop.xisf`; the cropped mosaics are opened in PixInsight (screen stretch only).
 
 ## 0.1.0
-- First version: per-filter pipeline (ImageSolver, MosaicByCoordinates, TrimMosaicTile, PhotometricMosaic),
+- First version: per-filter pipeline (plate solving, registration, trim, join) driving external scripts,
   shared geometry across filters, dialog with persistent settings, serial and experimental parallel execution.

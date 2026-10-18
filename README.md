@@ -1,25 +1,26 @@
 # OneClick Mosaic - PixInsight
 
-**One run, one mosaic per filter.** A PixInsight script (PJSR) that takes the panels of a mosaic, groups them by filter
-(L, R, G, B, Ha, OIII, SII, ...) and produces a finished, cropped mosaic for each filter, using the established
-PixInsight tools with their default settings:
+**One run, one mosaic per filter.** A self-contained PixInsight script (PJSR) that takes the panels of a mosaic, groups
+them by filter (L, R, G, B, Ha, OIII, SII, ...) and produces a finished, cropped mosaic for each filter:
 
 ```
-[ImageSolver] -> MosaicByCoordinates -> TrimMosaicTile -> PhotometricMosaic -> common autocrop
- (only for panels
-  without a solution)
+[plate solving] -> registration -> trim -> photometric join -> common autocrop
+ (only panels without
+  astrometric data)
 ```
 
-> **Since 0.3.0** the default engine is AutoMosaic's own code (see [docs/ENGINE.md](docs/ENGINE.md)); the third-party
-> scripts listed under Requirements are only needed when the *Legacy* engine is selected (ImageSolver is optional).
-
-By Robert Panai. The mosaicking itself is done by tools written by Andrés del Pozo, Juan Conejero and John Murphy:
-see [CREDITS.md](CREDITS.md) - please read it, and credit them when you share your images.
+By Robert Panai. Registration, edge trimming, photometric scaling, gradient correction and joining are implemented in
+this repository (see [docs/ENGINE.md](docs/ENGINE.md)); no other mosaic script is required. The only external piece is
+PixInsight's own **ImageSolver** script, used when a panel has no astrometric data.
 
 ## Features
 - **Inputs:** files, a whole folder, or windows already open in PixInsight (open windows are never modified), grouped
   automatically by filter (FITS keyword, then file name). Reorder panels, move them between filters, rename filters.
-- **Plate solving:** never / only if missing (default) / always. Solving is done on a copy; originals are never touched.
+- **Automatic astrometry check:** every panel is checked for an astrometric solution as soon as it is added (WCS column).
+  If some panels have none, a notice appears under the list and, when you press Run, you are told which panels will be
+  solved, and which header items ImageSolver is missing (coordinates, focal length, pixel size).
+- **Plate solving with ImageSolver:** never / only if missing (default) / always. Solving is done on a copy; originals are
+  never touched. Pixel size and focal length from the options fill in for missing header values.
 - **Shared geometry:** the reference filter (default L) is built first and its geometry is reused by every other filter,
   so all mosaics share the same grid, size and orientation.
 - **Autocrop (default on):** one crop common to all filters - the largest rectangle with **zero empty pixels**, with the
@@ -32,9 +33,8 @@ see [CREDITS.md](CREDITS.md) - please read it, and credit them when you share yo
 
 ## Requirements
 - PixInsight 1.9.x (developed and tested on 1.9.3.8, Windows).
-- The following scripts, installed with PixInsight or from their authors, in the standard `src/scripts` location:
-  ImageSolver (tested 6.3.1), MosaicByCoordinates (1.3.3), TrimMosaicTile (4.0.1), PhotometricMosaic (4.0.2).
-  Versions are checked at start; unsupported versions stop the run with a clear message.
+- Only for panels without astrometric data: PixInsight's ImageSolver script (tested 6.3.1), part of the standard
+  installation. Its version is checked before it is used.
 
 ## Install
 
@@ -50,33 +50,27 @@ see [CREDITS.md](CREDITS.md) - please read it, and credit them when you share yo
 **Manual:** clone or download this repository, then **SCRIPT > Feature Scripts > Add**, select the repository folder
 (keep it free of very large files: PixInsight scans it recursively), **Done**.
 
-Remember that the four tools listed under Requirements must be installed too.
-
 ## Use
-1. Add files / folder / windows. Check the filter grouping.
+1. Add files / folder / windows. Check the filter grouping and the WCS column.
 2. Choose the output folder and options. Press **Run**.
 
 Output:
 ```
 <out>/<filter>/01_solved/            solved copies (only if solving was needed)
-<out>/<filter>/02_registered/        MosaicByCoordinates output
-<out>/<filter>/03_trimmed/           TrimMosaicTile output (+ partial mosaics)
+<out>/<filter>/02_registered/        panels reprojected on the common grid
+<out>/<filter>/03_trimmed/           trimmed panels (+ partial mosaics)
 <out>/<filter>/Mosaic_<filter>.xisf         the mosaic
 <out>/<filter>/Mosaic_<filter>_crop.xisf    the cropped mosaic (autocrop)
 <out>/AutoMosaic_<timestamp>.log
 ```
 
 ## How it works
-See [docs/RECON.md](docs/RECON.md) (how each tool is driven headlessly, autocrop algorithm, parallel mode) and
-[TESTING.md](TESTING.md) (results). In short, each third-party script is `#include`d at run time inside a function scope,
-its macros are `#undef`ed, and a headless `main()` replaces its dialog - so the tools run exactly as they would from their
-own dialogs, with default settings, but without any user interaction.
+See [docs/ENGINE.md](docs/ENGINE.md) and [TESTING.md](TESTING.md).
 
 ## Status
-Version 0.2.0. Verified: bit-identical mosaics versus the manual workflow, shared geometry, serial vs parallel identical,
-failure isolation, autocrop on L + OIII. Not yet verified: a real ImageSolver run on unsolved panels, RGB/colour panels,
-aborting in the middle of a run. Issues and feedback are welcome.
+Version 0.3.0. Verified on a two-panel mosaic in six filters (shared geometry, autocrop). Grids of more than two panels,
+colour panels and a real ImageSolver run from the dialog flow are covered by [TESTING.md](TESTING.md). Issues and feedback
+are welcome.
 
 ## Licence
-MIT for the files in this repository (see [LICENSE](LICENSE)). The tools it drives keep their own licences
-([CREDITS.md](CREDITS.md)); they are not distributed here.
+MIT (see [LICENSE](LICENSE)). See [CREDITS.md](CREDITS.md).
