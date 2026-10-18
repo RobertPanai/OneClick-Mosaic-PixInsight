@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.2
+- **Plate solving of the delivered mosaics.** Each opened mosaic (cropped and/or uncropped) is plate solved with
+  PixInsight's ImageSolver dialog. This is on by default and can be turned off with the new option
+  *Plate solve the mosaics (ImageSolver)*. The solve runs once per kind of mosaic (cropped / uncropped) and the solution
+  is copied to the other filters, which share the same grid and crop. Cropping drops the astrometric solution, so the
+  cropped and uncropped mosaics are solved separately.
+- If plate solving fails or is cancelled, the mosaics are still delivered (open, and saved if requested) and the message
+  says that they have no astrometric solution.
+
 ## 0.3.1
 - **Nothing is saved by default.** The work is done in a temporary folder that is deleted at the end. The cropped mosaic
   of each filter is opened in PixInsight; the uncropped one can be opened too. Saving to a folder is optional

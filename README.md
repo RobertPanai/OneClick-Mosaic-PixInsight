@@ -78,7 +78,7 @@ The full derivation, formulas and parameters are in **[docs/ENGINE.md](docs/ENGI
 
 1. **Add Files / Add Folder / Add Windows.** Check the filter grouping and the **WCS** column.
 2. If a notice says some panels have no astrometric data, tick *Plate solve panels without astrometric data*: the ImageSolver dialog opens on each of them. Set it up and press OK; the mosaic starts by itself.
-3. Choose the result: **Open cropped mosaic** (default), *Open uncropped mosaic*, and/or *Save to folder* (cropped / uncropped). Press **Run**.
+3. Choose the result: **Open cropped mosaic** (default), *Open uncropped mosaic*, and/or *Save to folder* (cropped / uncropped). *Plate solve the mosaics (ImageSolver)* is on by default: the first mosaic is solved with the ImageSolver dialog and the solution is copied to the other filters. If the solve fails or is cancelled, the mosaic is still delivered and the message says it has no astrometric solution. Press **Run**.
 
 Nothing is saved unless you ask for it. The intermediate files live in a temporary folder that is deleted at the end of the run.
 If a step fails, a message box explains what went wrong and what to check.
